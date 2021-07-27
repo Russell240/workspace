@@ -1,7 +1,7 @@
 import hashlib
 import os
 import re
-import pyodbc
+import pyodbc as odbc
 
 
 users = {} # A simple demo storage
@@ -49,16 +49,20 @@ else:
 
 
 
-if salt is None:
-        print("Error username not found")
 
-conn= pyodbc.connect('Driver={SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
-                    'Database=python;'   'Trusted_Connection=yes;' )
+try: 
+    conn= pyodbc.connect('Driver={SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
+                        'Database=python;'   'Trusted_Connection=yes;' )
 
-cnxn = pyodbc.connect(conn)
+except Exception as e:
+    print(e)
+    print("failed connection ")
+else: 
+    cursor = con.cusor
 
-username
-password
+    username
+    password
 
-cursor.execute("insert into User(Username, Password) values (?, ?)", 'username','password'  )
-conn.commit()
+
+    cursor.execute("insert into User(Username, Password) values (?, ?)", 'username','password'  )
+    conn.commit()
