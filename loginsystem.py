@@ -1,27 +1,39 @@
 import hashlib
 import os
 import re
+import pyodbc
+
 
 users = {} # A simple demo storage
 
 # Add a user
-username = input(print("Enter a username")) # The users username
-password = input(print("Enter a password which is atleast 8 characters long ")) # The users password
-if(re.fullmatch(r'[A-Za-z0-9#$%^&+={8,}]',password )):
+username = input(("Enter a username : ")) # The users username
+if(username==""):
+        print("Don't leave username blank")
+        username = input(("Enter a username : ")) 
 
-    salt = os.urandom(32) # A new salt for this user
-    key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
-    users[username] = { # Store the salt and key
-        'salt': salt,
-        'key': key
-}
 
-else:print("Enter a password which is atleast 8 characters long ")
+password = input(("Enter a password which is atleast 8 characters long: ")) # The users password 
+if len(password) <= 8:
+    print("Enter a longer password")
+    password = input(("Enter a password which is atleast 8 characters long: "))
+       
 
-# Verification attempt 1 
 salt = os.urandom(32) 
-username =  input(print("Enter your username again"))
-password = input(print("Enter your password again"))
+key = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt, 100000)
+users[username] = { # Store the salt and key
+    'salt': salt, 
+    'key': key
+}   
+
+
+        # Verification attempt 1 
+username = input("Enter your username again: ")
+password = input("Enter your password again: ")
+if len(password) <= 8:
+    print("Enter a longer password")
+    password = input(("Enter a password which is atleast 8 characters long: "))
+
 
 salt = users[username]['salt'] # Get the salt
 key = users[username]['key'] # Get the correct key
@@ -33,7 +45,20 @@ if  key != new_key:
 else:    
 
     print("succesfull login")
-    h = hashlib.blake2b.hexdigest
-    print(h)
+    print(salt); 
 
 
+
+if salt is None:
+        print("Error username not found")
+
+conn= pyodbc.connect('Driver={SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
+                    'Database=python;'   'Trusted_Connection=yes;' )
+
+cnxn = pyodbc.connect(conn)
+
+username
+password
+
+cursor.execute("insert into User(Username, Password) values (?, ?)", 'username','password'  )
+conn.commit()
