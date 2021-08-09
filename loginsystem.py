@@ -1,7 +1,6 @@
 import hashlib
 import os
-import re
-import pyodbc as odbc
+import pyodbc
 
 
 users = {} # A simple demo storage
@@ -47,22 +46,15 @@ else:
     print("succesfull login")
     print(salt); 
 
-
-
-
 try: 
-    conn= pyodbc.connect('Driver={SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
-                        'Database=python;'   'Trusted_Connection=yes;' )
-
+        conn= pyodbc.connect('Driver= {ODBC Driver 17 for SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
+                            'Database=python;'   'Trusted_Connection=yes;' )
+        print("Connection Success")                    
+               
 except Exception as e:
-    print(e)
-    print("failed connection ")
+        print(e)
+        print("failed connection ")
 else: 
-    cursor = con.cusor
-
-    username
-    password
-
-
-    cursor.execute("insert into User(Username, Password) values (?, ?)", 'username','password'  )
+    cursor = conn.cursor()
+    cursor.execute(" INSERT INTO User (Username, Password, ID)  Values( username,password, 1 " )
     conn.commit()
