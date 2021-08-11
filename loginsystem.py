@@ -7,14 +7,10 @@ def passwordvalidator(password):
     isvalid= True
     if(len(password) < 8 ): 
          isvalid = False
+         return False
     if isvalid: 
         return isvalid
-def LoginAttempt():
-   username= input(("Enter your username: "))
-   password= input(("Enter your password: "))
-   return username, password 
-   
- 
+     
 def main():
     users = {} # A simple demo storage
     count=0
@@ -25,11 +21,12 @@ def main():
     
         if(passwordvalidator(password)): 
             print("Password is valid ")
-            count=4
+            count=4 
+
         else: 
             print("Invalid password ")  
-            count= count+1 
-        
+            count= count+1
+ 
     users = {} # A simple demo storage
     salt = uuid.uuid4().hex
          
@@ -43,19 +40,19 @@ def main():
             cursor = conn.cursor()
             query="INSERT INTO Users (Username, Password) VALUES (?,? )" 
             parameters= username,hashedpassword,
-            conn.execute(query,parameters)
-            LoginAttempt()
-            username,password = LoginAttempt()
-            query1= """SELECT FROM Users WHERE Username=%s  AND Password=%s """
-            parameters1 = username,password
-            conn.execute(query1,parameters1)
-            cursor.commit()                  
+            conn.execute(query,parameters)#
+             
+            usernameforlogin= input(("Enter your Username For Login: "))
+            passwordforlogin= input(("Enter your Password for Login: "))
+            query1= """SELECT * FROM Users WHERE Username  ='?' AND  Where Password   ='? """
+            parameters2 = usernameforlogin,passwordforlogin
+            cursor.execute(query1,parameters2)
+            cursor.commit() 
+                          
             
     except Exception as e:
             print(e)
             print("failed connection ")
      
-    
-
 if __name__ == '__main__':
     main()
