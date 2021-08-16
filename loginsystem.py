@@ -31,25 +31,27 @@ def main():
     salt = uuid.uuid4().hex
          
     hashedpassword= hashlib.sha1(salt.encode() +
-     password.encode()).hexdigest() + ':' + salt
+    password.encode()).hexdigest() + ':' + salt
     print(hashedpassword)
     try: 
-            conn= pyodbc.connect('Driver= {ODBC Driver 17 for SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
-                                'Database=python;'   'Trusted_Connection=yes;' )
-            print("Connection Success")  
-            cursor = conn.cursor()
-            query="INSERT INTO Users (Username, Password) VALUES (?,? )" 
-            parameters= username,hashedpassword,
-            conn.execute(query,parameters)#
-             
-            usernameforlogin= input(("Enter your Username For Login: "))
-            passwordforlogin= input(("Enter your Password for Login: "))
-            query1= """SELECT * FROM Users WHERE Username  ='?' AND  Where Password   ='? """
-            parameters2 = usernameforlogin,passwordforlogin
-            cursor.execute(query1,parameters2)
-            cursor.commit() 
-                          
+        conn= pyodbc.connect('Driver= {ODBC Driver 17 for SQL Server};' 'Server=(LocalDB)\MSSQLLocalDB;' 
+                            'Database=python;'   'Trusted_Connection=yes;' )
+        print("Connection Success")  
+        cursor = conn.cursor()
+        query="INSERT INTO Users (Username, Password) VALUES (?,? )" 
+        parameters= username,hashedpassword,
+        conn.execute(query,parameters)
+        cursor.commit() 
             
+        usernameforlogin= input(("Enter your Username For Login: "))
+        passwordforlogin= input(("Enter your Password for Login: "))
+        query1= """SELECT * FROM Users WHERE Username =VALUE(?) """,
+        parameters2 = usernameforlogin,passwordforlogin
+        cursor.execute(query1)
+        rows = cursor.fetchall() 
+        cursor.commit() 
+        return rows 
+                         
     except Exception as e:
             print(e)
             print("failed connection ")
