@@ -4,32 +4,26 @@ import os
 import pyodbc
 
 def passwordvalidator(password): 
-    isvalid= True
-    if(len(password) < 8 ): 
-         isvalid = False
-         return False
-    if isvalid: 
-        return isvalid
+    complete= False
+    if not complete:
+        if len(password) <8:
+            print("Error enter a password longer than 8 characters")
+            complete=False
+        else:
+            complete= True
+
+            
      
 def main():
     users = {} # A simple demo storage
-    count=0
-    while count <3:
-        # Add a user
-        username = input(("Enter a username : ")) # The users username
-        password = input(("Enter a password which is atleast 8 characters long: ")) # The users password 
+   
+username = input(("Enter a username : ")) # The users username
+password = input(("Enter a password which is atleast 8 characters long: ")) # The users password 
     
-        if(passwordvalidator(password)): 
-            print("Password is valid ")
-            count=4 
-
-        else: 
-            print("Invalid password ")  
-            count= count+1
- 
+if(passwordvalidator):
     users = {} # A simple demo storage
     salt = uuid.uuid4().hex
-         
+            
     hashedpassword= hashlib.sha1(salt.encode() +
     password.encode()).hexdigest() + ':' + salt
     print(hashedpassword)
@@ -42,19 +36,18 @@ def main():
         parameters= username,hashedpassword,
         conn.execute(query,parameters)
         cursor.commit() 
-            
         usernameforlogin= input(("Enter your Username For Login: "))
         passwordforlogin= input(("Enter your Password for Login: "))
-        query1= """SELECT * FROM Users WHERE Username =VALUE(?) """,
-        parameters2 = usernameforlogin,passwordforlogin
+        query1= 'SELECT * FROM Users WHERE Username = %s AND Password=%s'%(usernameforlogin, passwordforlogin)
         cursor.execute(query1)
         rows = cursor.fetchall() 
         cursor.commit() 
-        return rows 
-                         
+    
+                            
     except Exception as e:
             print(e)
             print("failed connection ")
-     
+        
+    
 if __name__ == '__main__':
     main()
